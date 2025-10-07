@@ -1,5 +1,5 @@
-import { Slot } from 'expo-router'; // Slot renderiza as páginas filhos
-import { AuthProvider } from '../context/AuthContext';
+import { Slot } from 'expo-router'; 
+import { AuthProvider } from "../context/AuthContext";
 import { useFonts } from 'expo-font';
 import { View, Text } from 'react-native';
 
@@ -9,7 +9,6 @@ export default function RootLayout() {
   });
 
   if (!fontsLoaded) {
-    // Enquanto a fonte carrega, podemos mostrar um placeholder simples
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text>Carregando...</Text>
@@ -19,7 +18,7 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <Slot /> {/* Renderiza todas as páginas da pasta */}
+      <Slot />
     </AuthProvider>
   );
 }

@@ -1,8 +1,8 @@
-
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Dimensions, Platform} from 'react-native';
 import { useRouter } from 'expo-router';
 import { Image } from 'react-native';
+import { useAuth } from '../../context/AuthContext';
 import Pente from "../../assets/images/penteAmarelo.png";
 import Tesoura from "../../assets/images/tesouraAmarela.png";
 import Estrela from "../../assets/images/estrelaAmarela.png";
@@ -12,26 +12,35 @@ export default function clienteLogin() {
   const [senha, setSenha] = useState('')
 
   const router = useRouter();
+  const { setUsuarioLogado } = useAuth();
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('https://r4sb8ngs-3000.brs.devtunnels.ms/api/autenticacao/login', {method: "Post"});
-        const data = await response.json();
-      
+      const response = await fetch('https://r4sb8ngs-3000.brs.devtunnels.ms/api/autenticacao/login', 
+        {method: "POST",
+         headers: {
+          "Content-Type":"application/json",
+         },
+         body: JSON.stringify({nome, senha}),
+        });
 
       if (response.ok) {
-        const data = await response.json()
-        const id = data.id
-        router.push(`/Perfil/${ data.id }`);
+        const data = await response.json();
+        const id = data.id;
+
+        setUsuarioLogado(data);
+        router.push('/Perfil');
       } else {
-        const errorData = await response.json()
-        Alert.alert("Erro", `Erro ao fazer login: ${errorData.error}`);
+        const errorData = await response.json();
+        Alert.alert("Erro", `Erro ao fazer login: ${errorData.error || "Senha ou usuário inválidos"}`);
       }
     } catch (error) {
-      console.error('Erro ao fazer login:', error)
-      Alert.alert("Erro", 'Erro de conexão com o servidor.');
+      console.log("Erro ao fazer login:", error);
+      Alert.alert("Erro", "Erro de conexão com o servidor");
+
     }
   };
+
   
 
   
@@ -190,4 +199,3 @@ fotoEstrela5: {
     fontSize: width * 0.045,
   },
 });
-
