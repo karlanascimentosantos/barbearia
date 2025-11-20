@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { View, Text, TextInput, StyleSheet, Alert, TouchableOpacity, Image} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from "@expo/vector-icons"; 
 
-export default function Login() {
+export default function Login({}) {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,6 +41,11 @@ router.push('/(private)/PaginaInicial');
   return (
     <View style={styles.container}>
 
+      <TouchableOpacity onPress={() => router.push("/")}
+      >
+        <Ionicons name="arrow-back" size={24} color="#fff" />
+      </TouchableOpacity>
+
       <Image source={require('../../assets/logo3.png')}
                    style={styles.image}/>
 
@@ -49,7 +55,6 @@ router.push('/(private)/PaginaInicial');
 
       <Text style={styles.label}>Email:</Text>      
        <TextInput
-        placeholder="Email"
         value={email}
         onChangeText={setEmail}
         style={styles.input}
@@ -59,7 +64,6 @@ router.push('/(private)/PaginaInicial');
 
       <Text style={styles.label}>Senha:</Text>
       <TextInput
-        placeholder="Senha"
         value={password}
         onChangeText={setPassword}
         style={styles.input}
@@ -76,45 +80,64 @@ router.push('/(private)/PaginaInicial');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 40,
-    backgroundColor: '#000000ff'
+    backgroundColor: '#000000ff',
+    paddingHorizontal: 40,
+    paddingTop: 80,
   },
+
+  backButton: {
+    position: "absolute",
+    top: 50,
+    zIndex: 2,
+  },
+
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 10,
     fontFamily: "InknutAntiqua_400Regular",
     color: 'white',
-    fontFamily: 'times'
-    
-
+    fontFamily: 'times',
+    top: 50,
   },
+
   input: {
-    width: '90%',
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 100,
+    borderColor: "#fff",
+    borderRadius: 20,
     padding: 10,
-    marginBottom: 15,
+    color: "#fff",
+    top: 80,
   },
   button: {
-    backgroundColor: '#E9CA4F',
+    backgroundColor: "#E9CA4F",
     paddingVertical: 12,
-    paddingHorizontal: 60,
-    borderRadius: 100,
-    marginTop: 10
+    borderRadius: 20,
+    alignItems: "center",
+    marginTop: 180,
+    width: "60%", // 🔸 Diminui a largura do botão,
+    alignSelf: "center", // centraliza horizontalmente
   },
   buttonText: {
-    color: '#000000ff',
+    color: "#000",
     fontSize: 18,
-    fontWeight: 'bold',
-    fontFamily: 'times'
+    fontWeight: "bold",
+    fontFamily: 'times',
   },
   label: {
-    color: 'white',
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 5,
     fontFamily: 'times',
-    fontWeight: 'bold',
-    fontSize: 20,
+    top: 80,
+    marginTop: 30,
+  },
 
+  image: {
+    width: 140,
+    height: 135,
+    alignSelf: "center",
+    marginBottom: 50,
   }
+ 
 });

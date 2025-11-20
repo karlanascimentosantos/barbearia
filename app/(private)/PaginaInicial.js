@@ -1,12 +1,21 @@
 import { View, Text, StyleSheet, Image } from "react-native";
+import Calendar from '../components/Calendar'
+import ListaHorarios from  '../components/ListaHorarios'
 
 export default function PaginaInicial() {
   return (
     <View style={styles.container}>
-      <Text style={styles.texto}>Agendamentos do dia</Text>
-      <Image source={require('../../assets/man.png')}
-             style={styles.image}/>
-    </View>
+
+  <View style={{ flexDirection: "row", alignItems: "center" }}>
+    <Text style={styles.texto}>Agendamentos do dia</Text>
+    <Image source={require('../../assets/man.png')} style={styles.image} />
+  </View>
+
+  <Calendar mostrarSemana/>
+  <ListaHorarios/>
+
+</View>
+
   );
 }
 
@@ -14,8 +23,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#000000ff", 
-    flexDirection: "row", // coloca lado a lado
-  },
+    flexDirection: "column"  },
+
   texto: {
     fontSize: 20,
     color: "#ffffffff",
@@ -26,6 +35,6 @@ const styles = StyleSheet.create({
   image: {
     width: 50,
     height: 50,
-    marginRight: 10,
+    marginRight: 40,
   }
 });

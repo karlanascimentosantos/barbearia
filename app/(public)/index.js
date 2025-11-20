@@ -75,6 +75,10 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginTop: 450,
 
+  },
 
+  image: {
+    justifyContent: "center",
+    alignItems: "center",
   }
 });
