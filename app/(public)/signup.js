@@ -24,7 +24,7 @@ export default function Signup() {
 
 
       const response = await fetch(
-        'https://r4sb8ngs-3000.brs.devtunnels.ms/api/autenticacao/signup',
+        'https://db-bayo0lcm1-karla-mikaellys-projects.vercel.app/api/autenticacao/signup',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

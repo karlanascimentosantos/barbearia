@@ -1,88 +1,79 @@
-import { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
 
-export default function Historico() {
+import React, { useEffect, useState } from "react";
+import { FlatList, View, Text, StyleSheet } from "react-native";
+
+export default function ListaHorarios({ data }) {
   const [agendamentos, setAgendamentos] = useState([]);
 
-  const fetchHoje = async () => {
+  const formatarDataAPI = (d) => {
+    const ano = d.getFullYear();
+    const mes = String(d.getMonth() + 1).padStart(2, "0");
+    const dia = String(d.getDate()).padStart(2, "0");
+    return `${ano}-${mes}-${dia}`;
+  };
+
+  const fetchAgendamentos = async () => {
     try {
-      const response = await fetch(
-       "https://console.neon.tech/app/projects/winter-hat-88451502/api/agendamento?admin=true",
-  {
-        method: "GET",
-      credentials: "omit",
- }
-);
-      const data = await response.json();
-      setAgendamentos(data);
-      
-    } catch (error) {
-      console.error("Erro ao buscar histórico:", error);
+      const dataFormatada = formatarDataAPI(data);
+
+      const res = await fetch(
+        `https://r4sb8ngs-3000.brs.devtunnels.ms/api/agendamento?admin=true&data=${dataFormatada}`
+      );
+
+      const json = await res.json();
+
+    
+      setAgendamentos(Array.isArray(json) ? json : []);
+    } catch (e) {
+      console.log("Erro ao buscar esta merdaaaaaaaaaa", e);
+      setAgendamentos([]); 
     }
   };
 
   useEffect(() => {
-    fetchHoje();
-  }, []);
+    if (data) fetchAgendamentos();
+  }, [data]);
 
-  function formatarHora(dataISO) {
-    const d = new Date(dataISO);
-    return d.toLocaleTimeString("pt-BR", {
+  const renderItem = ({ item }) => {
+    const hora = new Date(item.datahora).toLocaleTimeString("pt-BR", {
       hour: "2-digit",
       minute: "2-digit",
     });
-  }
 
-  const renderItem = ({ item }) => (
-    <View style={styles.card}>
-      <Text style={styles.nome}>{item.cliente}</Text>
-      <Text style={styles.servico}>Serviço: {item.servico}</Text>
-      <Text style={styles.data}>Horário: {formatarHora(item.datahora)}</Text>
-    </View>
-  );
+    return (
+      <View style={styles.card}>
+        <Text style={styles.texto}>{item.consumidor} - {item.servico} {hora}h </Text> 
+      </View>
+    );
+  };
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={agendamentos}
-        keyExtractor={(item) => item.agendamentoid.toString()}
-        renderItem={renderItem}
-        ListEmptyComponent={
-          <Text style={styles.vazio}>Nenhum agendamento para hoje.</Text>
-        }
-      />
-    </View>
+    <>
+      {agendamentos.length === 0 ? (
+        <Text style={styles.vazio}>Nenhum horário para este dia.</Text>
+      ) : (
+        <FlatList
+         data={agendamentos}
+         renderItem={renderItem}
+         keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())}
+        />
+
+      )}
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000",
-    padding: 20,
-  },
   card: {
     backgroundColor: "#1a1a1a",
     padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
+    marginBottom: 10,
+    borderRadius: 10,
   },
-  nome: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  servico: {
-    color: "#ccc",
-    marginTop: 4,
-  },
-  data: {
-    color: "#aaa",
-    marginTop: 4,
-  },
+  texto: { color: "#fff", fontSize: 16 },
   vazio: {
-    color: "#777",
     textAlign: "center",
-    marginTop: 40,
+    marginTop: 20,
+    color: "#777",
   },
 });

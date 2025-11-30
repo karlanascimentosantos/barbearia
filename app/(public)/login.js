@@ -10,33 +10,45 @@ export default function Login({}) {
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert("Campos Obrigatórios", "Preencha email e senha");
+  if (!email || !password) {
+    Alert.alert("Campos Obrigatórios", "Preencha email e senha");
+    return;
+  }
+
+  try {
+    const response = await fetch('https://r4sb8ngs-3000.brs.devtunnels.ms//api/autenticacao/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, senha: password })
+    });
+
+    // 🔍 CAPTURA A RESPOSTA BRUTA (evita tela preta)
+    const raw = await response.text();
+    console.log("RAW do servidor:", raw);
+
+    let data;
+    try {
+      data = JSON.parse(raw);
+    } catch {
+      Alert.alert("Erro", "Servidor retornou uma resposta inválida");
       return;
     }
 
-    try {
-      const response = await fetch('https://r4sb8ngs-3000.brs.devtunnels.ms/api/autenticacao/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, senha: password })
-      });
+    console.log("JSON parseado:", data);
 
-      const data = await response.json();
-      console.log("Resposta do servidor:", data);
-
-      if (response.ok) {
-        await AsyncStorage.setItem('token', data.token || '');
-        await AsyncStorage.setItem('user', JSON.stringify(data.user || {})); 
-router.push('/(private)/PaginaInicial');
-      } else {
-        Alert.alert("Erro", data.error || "Credenciais inválidas");
-      }
-    } catch (error) {
-      console.error(error);
-      Alert.alert("Erro de conexão", "Não foi possível conectar ao servidor");
+    if (response.ok) {
+      await AsyncStorage.setItem('token', data.token || '');
+      await AsyncStorage.setItem('user', JSON.stringify(data.user || {}));
+      router.push('/(private)/PaginaInicial');
+    } else {
+      Alert.alert("Erro", data.error || "Credenciais inválidas");
     }
-  };
+
+  } catch (error) {
+    console.error(error);
+    Alert.alert("Erro de conexão", "Não foi possível conectar ao servidor");
+  }
+};
 
   return (
     <View style={styles.container}>

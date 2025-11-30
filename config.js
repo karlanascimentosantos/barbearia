@@ -1,0 +1,1 @@
+const API_URL = "https://r4sb8ngs-3000.brs.devtunnels.ms/api/agendamento";
