@@ -16,7 +16,7 @@ export default function Login({}) {
   }
 
   try {
-    const response = await fetch('https://r4sb8ngs-3000.brs.devtunnels.ms//api/autenticacao/login', {
+    const response = await fetch('https://r4sb8ngs-3000.brs.devtunnels.ms/api/autenticacao/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, senha: password })

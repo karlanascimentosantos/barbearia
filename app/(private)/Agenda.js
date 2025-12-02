@@ -47,7 +47,6 @@ export default function Agenda() {
 
           <View style={styles.horarioStatus}>
             <Text style={styles.hora}>{hora}h</Text>
-            {item.concluido && <Text style={styles.check}>✔</Text>}
           </View>
         </View>
       </View>
@@ -83,7 +82,6 @@ export default function Agenda() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#000", padding: 20 },
 
-  // HEADER
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -93,22 +91,22 @@ const styles = StyleSheet.create({
   },
   
 
-  // CARD DO CALENDÁRIO
   cardCalendario: {
-    backgroundColor: "#ddd",
+    backgroundColor: "#cfc6c6ff",
     paddingVertical: 25,
     paddingHorizontal: 20,
     borderRadius: 35,
     marginBottom: 25,
   },
 
-  // LISTA
   card: {
     backgroundColor: "#1a1a1a",
     padding: 16,
     borderRadius: 14,
     marginBottom: 14,
+    marginTop: 30,
   },
+  
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -116,7 +114,7 @@ const styles = StyleSheet.create({
   },
 
   nomeServico: {
-    color: "#fff",
+    color: "#d6c5c5ff",
     fontSize: 18,
     fontFamily: "serif",
   },
@@ -127,13 +125,9 @@ const styles = StyleSheet.create({
     gap: 6,
   },
 
-  hora: { color: "#aaa", fontSize: 16, fontFamily: "serif" },
+  hora: { color: "#d6c5c5ff", fontSize: 16, fontFamily: "serif" },
 
-  check: {
-    color: "#4CAF50",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
+  
 
   vazio: {
     textAlign: "center",

@@ -93,7 +93,7 @@ export default function CalendarMensal({ diaSelecionado, onDiaPress }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#ddd",
+    backgroundColor: "#cfc6c6ff",
     padding: 12,
     borderRadius: 16,
     marginBottom: 20
@@ -109,25 +109,32 @@ const styles = StyleSheet.create({
   mesTitulo: {
     fontSize: 22,
     fontWeight: "bold",
+    color: "#524617",
   },
 
   arrow: {
     fontSize: 22,
     fontWeight: "bold",
     paddingHorizontal: 10,
+    color: "#524617",
+
   },
 
   weekRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 6,
+    color: "#382d02ff",
+    fontWeight: "bold"
   },
 
   weekLabel: {
     width: "14.28%",
     textAlign: "center",
     fontSize: 12,
-    color: "#666",
+    color: "#382d02ff",
+    fontWeight: "bold",
+    fontFamily: "times new roman",
   },
 
   grid: {
@@ -145,7 +152,7 @@ const styles = StyleSheet.create({
   },
 
   daySelected: {
-    backgroundColor: "#d3d3d3",
+    backgroundColor: "#E9CA4F",
   },
 
   dayText: {
