@@ -1,143 +1,216 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
+import { useContext, useState } from "react";
+import { View, Text, TouchableOpacity, Modal, StyleSheet } from "react-native";
+import { AuthContext } from "../context/AuthContext";
+import { router } from "expo-router";
+  
+
 
 export default function Perfil() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { user, signOut } = useContext(AuthContext);
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const buscarUsuario = async () => {
-    try {
-      const res = await fetch(
-        "https://r4sb8ngs-3000.brs.devtunnels.ms/api/auth/session",
-        { credentials: "include" }
-      );
 
-      const json = await res.json();
+  function handleLogout() {
+    setModalVisible(true);
+  }
 
-      setUser(json?.user || null);
-    } catch (err) {
-      console.log("Erro ao carregar usuário:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  async function confirmLogout() {
+    await signOut();
+    setModalVisible(false);
+    router.replace("/");
+  }
 
-  useEffect(() => {
-    buscarUsuario();
-  }, []);
-
-  const logout = async () => {
-    await fetch("https://r4sb8ngs-3000.brs.devtunnels.ms/api/auth/signout", {
-      method: "POST",
-      credentials: "include",
-    });
-  };
-
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#fff" />
-      </View>
-    );
+  function goToChangePassword() {
+    router.push("/alterarSenha");
   }
 
   return (
     <View style={styles.container}>
       
-      <View style={styles.headerDiagonal} />
+      <View style={styles.profileCard}>
+        <Text style={styles.name}>{user?.nome}</Text>
+        <Text style={styles.email}>{user?.email}</Text>
 
-      <Text style={styles.titulo}>EU</Text>
+        <TouchableOpacity
+          style={styles.changePassButton}
+          onPress={goToChangePassword}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.changePassText}>Alterar Senha</Text>
+        </TouchableOpacity>
 
-      {/* FOTO DO PERFIL */}
-      <Image
-        source={{ uri: "https://i.imgur.com/OGa7N8Z.png" }}
-        style={styles.foto}
-      />
+        <TouchableOpacity
+          style={styles.logoutButton}
+          onPress={handleLogout}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.logoutText}>Sair da Conta</Text>
+        </TouchableOpacity>
+      </View>
 
-      <TouchableOpacity>
-        <Text style={styles.editarFoto}>Editar foto</Text>
-      </TouchableOpacity>
+   
+      <Modal transparent visible={modalVisible} animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalBox}>
+            <Text style={styles.modalTitle}>Sair da Conta?</Text>
+            <Text style={styles.modalMessage}>Deseja realmente sair?</Text>
 
-      {/* INFORMAÇÕES */}
-      <Text style={styles.info}>Email:  {user?.email}</Text>
-      <Text style={styles.info}>Telefone: {user?.telefone || "Não informado"}</Text>
+            <View style={styles.buttonsRow}>
+              <TouchableOpacity
+                style={styles.cancelButton}
+                onPress={() => setModalVisible(false)}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.cancelText}>Cancelar</Text>
+              </TouchableOpacity>
 
-      <TouchableOpacity style={styles.botao}>
-        <Text style={styles.botaoTexto}>Editar dados pessoais</Text>
-      </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.confirmButton}
+                onPress={confirmLogout}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.confirmText}>Sim, sair</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
-      <TouchableOpacity>
-        <Text style={styles.alterarSenha}>Alterar senha</Text>
-      </TouchableOpacity>
-
-      {/* SAIR */}
-      <TouchableOpacity onPress={logout}>
-        <Text style={styles.sair}>Sair</Text>
-      </TouchableOpacity>
     </View>
   );
 }
 
+const COLORS = {
+  background: "#000000",
+  yellow: "#F7C844",
+  yellowDark: "#D9A72E",
+  card: "#0F0F0F",
+  text: "#FFFFFF",
+  red: "#E44545",
+  muted: "#AAA",
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000",
-    paddingTop: 80,
-    alignItems: "center",
-  },
-  headerDiagonal: {
-    position: "absolute",
-    width: "100%",
-    height: 140,
-    backgroundColor: "#e1c24a",
-    transform: [{ skewY: "-10deg" }],
-    top: -40,
-  },
-  titulo: {
-    color: "#fff",
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  foto: {
-    width: 150,
-    height: 150,
-    borderRadius: 100,
-  },
-  editarFoto: {
-    color: "#fff",
-    marginTop: 10,
-    marginBottom: 30,
-  },
-  info: {
-    color: "#fff",
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  botao: {
-    backgroundColor: "#444",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 5,
-    marginTop: 10,
-  },
-  botaoTexto: {
-    color: "#fff",
-  },
-  alterarSenha: {
-    color: "#fff",
-    fontSize: 16,
-    marginTop: 30,
-  },
-  sair: {
-    color: "#fff",
-    fontSize: 20,
-    marginTop: 50,
-  },
-  loadingContainer: {
-    flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: COLORS.background,
+    padding: 20,
     justifyContent: "center",
     alignItems: "center",
+  },
+
+
+  profileCard: {
+    width: "100%",
+    backgroundColor: COLORS.card,
+    paddingVertical: 35,
+    paddingHorizontal: 25,
+    borderRadius: 18,
+    alignItems: "center",
+    shadowColor: "#494141ff",
+    shadowOpacity: 0.5,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 12,
+  },
+
+  name: {
+    color: COLORS.yellow,
+    fontSize: 28,
+    fontWeight: "bold",
+    marginBottom: 6,
+    fontFamily: "times new roman",
+  },
+  email: {
+    color: COLORS.muted,
+    fontSize: 16,
+    marginBottom: 30,
+    fontFamily: "times new roman",
+  },
+
+  changePassButton: {
+    backgroundColor: COLORS.yellow,
+    padding: 15,
+    width: "100%",
+    borderRadius: 14,
+    marginBottom: 15,
+  
+  },
+  changePassText: {
+    textAlign: "center",
+    color: "#000",
+    fontSize: 17,
+    fontWeight: "700",
+    fontFamily: "arial",
+  },
+
+  logoutButton: {
+    backgroundColor: COLORS.red,
+    padding: 15,
+    width: "100%",
+    borderRadius: 14,
+  },
+  logoutText: {
+    textAlign: "center",
+    color: "#fff",
+    fontSize: 17,
+    fontWeight: "700",
+    fontFamily: "serif"
+  },
+
+ 
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.8)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  modalBox: {
+    width: "100%",
+    backgroundColor: COLORS.card,
+    padding: 30,
+    borderRadius: 15,
+    shadowColor: "#000",
+    shadowOpacity: 0.4,
+    shadowRadius: 10,
+    elevation: 10,
+  },
+
+  modalTitle: {
+    color: COLORS.yellow,
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 10,
+    fontFamily: "arial"
+  },
+  modalMessage: {
+    color: COLORS.text,
+    fontSize: 16,
+    marginBottom: 25,
+  },
+
+  buttonsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  cancelButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+  },
+  cancelText: {
+    color: COLORS.muted,
+    fontSize: 16,
+  },
+  confirmButton: {
+    backgroundColor: COLORS.red,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+  },
+  confirmText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "700",
   },
 });

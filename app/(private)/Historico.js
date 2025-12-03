@@ -36,8 +36,9 @@ export default function Historico() {
       setTotal(historicoData.total);
 
       const resServico = await fetch(
-        "https://r4sb8ngs-3000.brs.devtunnels.ms/api/servico-mais-escolhido"
-      );
+       `https://r4sb8ngs-3000.brs.devtunnels.ms/api/servico-mais-escolhido?ano=${ano}`
+        );
+
       const servicoData = await resServico.json();
 
       setMaisEscolhido(servicoData?.servico || "Nenhum");
@@ -62,7 +63,7 @@ export default function Historico() {
   if (loading) {
     return (
       <View style={styles.loading}>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" color="white"/>
       </View>
     );
   }
@@ -138,7 +139,8 @@ const styles = StyleSheet.create({
   loading: {
     flex: 1, 
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    backgroundColor: "black",
   },
 
   titulo: { 
@@ -200,14 +202,14 @@ const styles = StyleSheet.create({
   nomeMes: { 
   fontSize: 18, 
   fontWeight: "bold", 
-  color: "#c3c3beff",
+  color: "#E9CA4F",
   fontFamily: "serif"
 },
 
   itemBox: {
     paddingVertical: 6,
     borderBottomWidth: 1,
-    borderColor: "#DDD",
+    borderColor: "#564d4dff",
   },
 
   vazio: { 
@@ -216,8 +218,9 @@ const styles = StyleSheet.create({
   },
 
   text: {
-  color: "",
-  fontFamily: "serif"
+  color: "#c3c3beff",
+  fontFamily: "serif",
+  fontSize: 18,
   },
 
   valor: {

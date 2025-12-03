@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator} from "react-native";
 import ListaAgendamentos from "../components/ListaAgendamentos";
 import CalendarMensal from "../components/CalendarMensal";
 
 export default function Agenda() {
   const [diaSelecionado, setDiaSelecionado] = useState(new Date());
   const [agendamentos, setAgendamentos] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!diaSelecionado) return;
@@ -29,6 +30,8 @@ export default function Agenda() {
       setAgendamentos(json);
     } catch (error) {
       console.error("Erro ao buscar agendamentos:", error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -37,6 +40,14 @@ export default function Agenda() {
       hour: "2-digit",
       minute: "2-digit",
     });
+
+      if (loading) {
+      return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="white" />
+       </View>
+      );
+          }
 
     return (
       <View style={styles.card}>
@@ -127,13 +138,18 @@ const styles = StyleSheet.create({
 
   hora: { color: "#d6c5c5ff", fontSize: 16, fontFamily: "serif" },
 
-  
-
   vazio: {
     textAlign: "center",
     color: "#777",
     fontSize: 16,
     marginTop: 30,
     fontFamily: "serif",
+  },
+
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: "#000",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

@@ -12,7 +12,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#E9CA4F"
       }
     },
     "web": {
@@ -24,7 +24,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/BarbeariadoDeda.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
@@ -38,6 +38,13 @@
     "assetBundlePatterns": [
       "**/*",
       "assets/fonts/*"
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "1945dac1-d669-4a5f-83ff-feade19dd995"
+      }
+    },
+    "owner": "karlamns"
   }
 }

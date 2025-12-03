@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
 import { useState, useEffect } from "react";
 import ListaHorarios from "../components/ListaHorarios";
 
@@ -6,6 +6,8 @@ export default function PaginaInicial() {
   const [diaSelecionado, setDiaSelecionado] = useState(new Date());
   const [faturamento, setFaturamento] = useState(0);
   const [agendamentos, setAgendamentos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
 
   
   const formatarDataAPI = (d) => {
@@ -48,6 +50,8 @@ export default function PaginaInicial() {
     } catch (err) {
       console.log("Erro ao buscar agendamentos:", err);
       setAgendamentos([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -70,6 +74,14 @@ export default function PaginaInicial() {
       month: "2-digit",
       year: "numeric",
     });
+
+    if (loading) {
+        return (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="white" />
+          </View>
+        );
+      }
 
   return (
     <View style={styles.container}>
@@ -163,4 +175,11 @@ cardTitulo: {
     color: "#fff",
     fontSize: 18,
   },
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: "#000",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
+

@@ -3,6 +3,8 @@ import { useFonts, InknutAntiqua_400Regular } from "@expo-google-fonts/inknut-an
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
+import { AuthProvider } from "./context/AuthContext";
+
 SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {
@@ -17,10 +19,15 @@ export default function Layout() {
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
-    return null; 
+    return null;
   }
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <AuthProvider>
+      <Stack screenOptions={{ headerShown: false }} />
+    </AuthProvider>
+  );
 }
+
 
 

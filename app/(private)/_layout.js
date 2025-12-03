@@ -11,7 +11,7 @@ function CustomDrawerContent(props) {
         <Text style={{ color: "#020202ff", fontSize: 20, fontWeight: "bold" }}>Menu</Text>
       </View>
 
-      {/* Aqui entram as páginas */}
+      
       <DrawerItemList {...props} />
     </DrawerContentScrollView>
   );
