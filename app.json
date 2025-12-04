@@ -40,11 +40,8 @@
       "assets/fonts/*"
     ],
     "extra": {
-      "router": {},
-      "eas": {
-        "projectId": "1945dac1-d669-4a5f-83ff-feade19dd995"
-      }
-    },
-    "owner": "karlamns"
+      "router": {}
+    }
+   
   }
 }
